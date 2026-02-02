@@ -1,3 +1,7 @@
-b = Book.objects.first()
-b.title = "Nineteen Eighty-Four"
-b.save()
+from bookshelf.models import Book
+
+book = Book.objects.get(title="1984")
+book.title = "Nineteen Eighty-Four"
+book.save()
+
+
