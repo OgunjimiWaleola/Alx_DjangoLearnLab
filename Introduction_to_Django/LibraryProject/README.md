@@ -26,3 +26,4 @@ manage.py → Django command utility
 settings.py → Project configuration  
 urls.py → URL routing  
 wsgi.py → Deployment entry  
+ 
