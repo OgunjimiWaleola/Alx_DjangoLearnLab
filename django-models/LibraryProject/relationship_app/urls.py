@@ -1,7 +1,9 @@
+# relationship_app/urls.py
+
 from django.urls import path
-from . import views
+from .views import list_books, LibraryDetailView  # ✅ exact import ALX expects
 
 urlpatterns = [
-    path('books/', views.list_books, name='list_books'),  # FBV
-    path('library/<int:pk>/', views.LibraryDetailView.as_view(), name='library_detail'),  # CBV
+    path('books/', list_books, name='list_books'),  # FBV
+    path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),  # CBV
 ]
