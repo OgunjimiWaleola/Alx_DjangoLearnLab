@@ -12,8 +12,8 @@ urlpatterns = [
     path('books/', list_books, name='list_books'),
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
 
-    # Authentication
-    path('register/', register, name='register'),
-    path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', CustomLogoutView.as_view(), name='logout'),
+    # Authentication URLs
+    path('register/', register, name='register'),            # function-based
+    path('login/', CustomLoginView.as_view(), name='login'), # class-based
+    path('logout/', CustomLogoutView.as_view(), name='logout'), # class-based
 ]
