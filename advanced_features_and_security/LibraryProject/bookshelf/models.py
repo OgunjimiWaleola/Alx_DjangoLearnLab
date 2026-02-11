@@ -1,3 +1,16 @@
+"""
+Custom permissions setup:
+
+- Book model has permissions: can_view, can_create, can_edit, can_delete
+- Groups:
+    - Viewers: can_view
+    - Editors: can_create, can_edit
+    - Admins: all permissions
+- Views are protected using @permission_required decorator
+"""
+
+
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
@@ -42,3 +55,22 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=200)
+    published_date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view book"),
+            ("can_create", "Can create book"),
+            ("can_edit", "Can edit book"),
+            ("can_delete", "Can delete book"),
+        ]
+
+
