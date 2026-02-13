@@ -161,3 +161,34 @@ CSP_IMG_SRC = ("'self'",)
 # CSRF_COOKIE_SECURE ensures CSRF cookies are sent over HTTPS only.
 # SESSION_COOKIE_SECURE ensures session cookies are secure.
 # CSP middleware restricts loading of external scripts to prevent XSS.
+
+
+# ==========================================================
+# HTTPS & SECURITY CONFIGURATION (Production Settings)
+# ==========================================================
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+# Forces browsers to use HTTPS for 1 year (31536000 seconds)
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+
+# Apply HSTS to all subdomains
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# Allow site to be included in browser preload list
+SECURE_HSTS_PRELOAD = True
+
+# Secure Cookies - Only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Prevent clickjacking
+X_FRAME_OPTIONS = "DENY"
+
+# Prevent MIME-sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable browser XSS filtering
+SECURE_BROWSER_XSS_FILTER = True
