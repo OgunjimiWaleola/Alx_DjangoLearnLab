@@ -3,6 +3,19 @@ from django.contrib.auth.decorators import permission_required
 from .models import Book
 from .forms import BookForm
 
+
+from django.shortcuts import render
+from .models import Book
+
+def search_books(request):
+    query = request.GET.get('q', '')
+
+    # Safe ORM filtering
+    books = Book.objects.filter(title__icontains=query)
+
+    return render(request, 'bookshelf/book_list.html', {'books': books})
+
+
 # View list of books (view permission)
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
@@ -42,3 +55,7 @@ def book_delete(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'bookshelf/book_confirm_delete.html', {'book': book})
+
+# Using Django ORM to prevent SQL injection.
+# Django automatically parameterizes queries when using filter().
+# Forms are used for validation and sanitization of user input.

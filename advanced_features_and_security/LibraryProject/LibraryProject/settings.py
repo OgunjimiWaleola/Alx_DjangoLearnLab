@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'bookshelf', 
     'relationship_app',  
     'posts',
-
+    'csp',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -126,3 +127,37 @@ AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+# SECURITY SETTINGS
+
+DEBUG = False  # Set to False in production
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # Add your domain in production
+
+# Prevent MIME type sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Prevent XSS filtering bypass
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# Force cookies to be sent only over HTTPS
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'",)
+
+
+# SECURITY CONFIGURATION 
+# DEBUG is set to False to prevent exposing sensitive error details in production.
+# SECURE_CONTENT_TYPE_NOSNIFF prevents MIME-type sniffing attacks.
+# X_FRAME_OPTIONS prevents clickjacking attacks.
+# CSRF_COOKIE_SECURE ensures CSRF cookies are sent over HTTPS only.
+# SESSION_COOKIE_SECURE ensures session cookies are secure.
+# CSP middleware restricts loading of external scripts to prevent XSS.
