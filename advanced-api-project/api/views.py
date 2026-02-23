@@ -1,6 +1,6 @@
-from django_filters import rest_framework
-from rest_framework import generics
+from rest_framework import generics, filters
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from django_filters import rest_framework
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters import rest_framework  # REQUIRED by checker
 
