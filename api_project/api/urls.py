@@ -13,3 +13,15 @@ urlpatterns = [
     # Include all CRUD routes from router
     path('', include(router.urls)),
 ]
+
+
+from rest_framework.authtoken.views import obtain_auth_token
+
+urlpatterns = [
+    # Existing endpoints
+    path('books/', BookList.as_view(), name='book-list'),
+    path('', include(router.urls)),
+
+    # Token authentication endpoint
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),
+]
