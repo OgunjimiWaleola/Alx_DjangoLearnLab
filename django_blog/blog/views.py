@@ -3,6 +3,11 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import RegisterForm
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
+from .models import Post
+
 
 def register(request):
     if request.method == 'POST':
@@ -26,4 +31,62 @@ def profile(request):
         return redirect('profile')
     return render(request, 'blog/profile.html')
 
+# List all posts - public
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'  # template to render
+    context_object_name = 'posts'
+    ordering = ['-published_date']  # newest first
 
+# View a single post - public
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+
+# Create a post - only authenticated users
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'blog/post_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user  # set author automatically
+        return super().form_valid(form)
+
+# Update a post - only the author
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Post
+    fields = ['title', 'content']
+    template_name = 'blog/post_form.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author  # only author can edit
+
+# Delete a post - only the author
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('post-list')
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+    
+
+# Blog Post Management
+#list posts: `/posts/`
+#view post: `/posts/<pk>/`
+#create post: `/posts/new/` (login required)
+#Edit post: `/posts/<pk>/edit/` (author only)
+#delete post: `/posts/<pk>/delete/` (author only)
+
+ 
+#Permissions:
+# Only authenticated users can create posts
+# Only the author can edit/delete their posts
+# Anyone can view posts
