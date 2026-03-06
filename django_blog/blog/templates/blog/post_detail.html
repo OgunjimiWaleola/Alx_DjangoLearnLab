@@ -17,6 +17,18 @@
 {% endfor %}
 
 {% if user.is_authenticated %}
+
+<h3>Tags:</h3>
+
+{% for tag in object.tags.all %}
+<a href="{% url 'posts-by-tag' tag.name %}">
+    {{ tag.name }}
+</a>
+{% empty %}
+<p>No tags</p>
+{% endfor %}
+
+
     <h4>Add Comment</h4>
     <form method="POST" action="{% url 'comment-create' object.pk %}">
         {% csrf_token %}
