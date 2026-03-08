@@ -72,3 +72,22 @@ Update comment
 
 DELETE /api/comments/{id}/  
 Delete comment
+
+
+
+## Follow System
+
+Follow a user
+
+POST /api/accounts/follow/{user_id}/
+
+Unfollow a user
+
+POST /api/accounts/unfollow/{user_id}/
+
+
+## Feed Endpoint
+
+Retrieve posts from users you follow
+
+GET /api/feed/
