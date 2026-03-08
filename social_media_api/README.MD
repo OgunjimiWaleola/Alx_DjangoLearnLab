@@ -91,3 +91,13 @@ POST /api/accounts/unfollow/{user_id}/
 Retrieve posts from users you follow
 
 GET /api/feed/
+
+
+## Likes Endpoints
+
+POST /api/posts/<post_id>/like/ - Like a post
+POST /api/posts/<post_id>/unlike/ - Unlike a post
+
+## Notifications Endpoints
+
+GET /api/notifications/ - Fetch your notifications
