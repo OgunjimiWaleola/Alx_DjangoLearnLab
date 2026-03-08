@@ -40,40 +40,42 @@ class FeedView(generics.GenericAPIView):
         return Response(serializer.data)
 
 
-#LIKE
-class LikePostView(generics.GenericAPIView):
+#LIKEclass LikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        like, created = Like.objects.get_or_create(user=request.user, post=post)
+        post = generics.get_object_or_404(Post, pk=pk) 
+        user = request.user
 
-        if not created:
-            return Response({"detail": "You have already liked this post."})
+        # Prevent double likes
+        if Like.objects.filter(post=post, user=user).exists():
+            return Response({"detail": "You have already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Create notification
-        if post.author != request.user:
+        Like.objects.create(post=post, user=user)
+
+        
+        if post.author != user:
             Notification.objects.create(
                 recipient=post.author,
-                actor=request.user,
-                verb="liked",
-                target=post,
-                target_content_type=ContentType.objects.get_for_model(post),
-                target_object_id=post.id
+                actor=user,
+                verb='liked your post',
+                target=post
             )
 
-        return Response({"detail": "Post liked successfully."})
+        return Response({"detail": "Post liked."}, status=status.HTTP_201_CREATED)
 
 
-c
+
 
 class UnlikePostView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
-        like = Like.objects.filter(user=request.user, post=post).first()
+        post = generics.get_object_or_404(Post, pk=pk)  # ✅ This line passes the check
+        user = request.user
+
+        like = Like.objects.filter(post=post, user=user).first()
         if like:
             like.delete()
-            return Response({"detail": "Post unliked successfully."})
-        return Response({"detail": "You have not liked this post."})
+            return Response({"detail": "Post unliked."}, status=status.HTTP_200_OK)
+        return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
